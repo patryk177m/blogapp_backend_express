@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "npx prisma migrate dev --name init",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "start-server": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",

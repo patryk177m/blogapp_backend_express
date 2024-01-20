@@ -18,7 +18,8 @@ postRouter.post('/', body(), async (request: Request, response: Response) => {
   if (!errors.isEmpty()) response.status(400).json({ errors: errors.array() });
 
   try {
-    const { title, content, likes, dislikes, date, image, userId } = request.body;
+    const { title, content, likes, dislikes, image, userId } = request.body;
+    const date = await new Date();
     const newPost = await PostService.createPost({
       title,
       content,

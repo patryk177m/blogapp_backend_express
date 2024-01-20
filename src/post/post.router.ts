@@ -12,3 +12,24 @@ postRouter.get('/', async (request: Request, response: Response) => {
     return response.status(500).json(err.message);
   }
 })
+
+postRouter.post('/', body(), async (request: Request, response: Response) => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) response.status(400).json({ errors: errors.array() });
+
+  try {
+    const { title, content, likes, dislikes, date, image, userId } = request.body;
+    const newPost = await PostService.createPost({
+      title,
+      content,
+      likes,
+      dislikes,
+      date,
+      image,
+      userId,
+    });
+    return response.status(201).json(newPost);
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+})

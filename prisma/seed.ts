@@ -1,4 +1,4 @@
-import { Category, Post, User, Comment, PostCategory } from "../src/data/types";
+import { Category, Post, User, Comment, PostCategory, PostWrite } from "../src/data/types";
 import { db } from "../src/utils/db.server";
 
 function getUsers(): (Omit<User, 'id'>)[] {
@@ -24,7 +24,7 @@ function getUsers(): (Omit<User, 'id'>)[] {
   ];
 }
 
-function getPosts(): (Omit<Post, "id">)[] {
+function getPosts(): (PostWrite)[] {
   return [
     {
       title: "title post 1 John Doe",

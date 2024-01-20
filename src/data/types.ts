@@ -14,6 +14,16 @@ export type Post = {
   dislikes: number;
   date: Date;
   image: string | null;
+  user: User;
+};
+
+export type PostWrite = {
+  title: string;
+  content: string;
+  likes: number;
+  dislikes: number;
+  date: Date;
+  image: string | null;
   userId: number;
 };
 

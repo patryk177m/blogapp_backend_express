@@ -1,4 +1,4 @@
-import { Post } from "../data/types";
+import { Post, PostWrite } from "../data/types";
 import { db } from "../utils/db.server";
 
 export const getPosts = async (): Promise<Post[]> => {
@@ -11,7 +11,15 @@ export const getPosts = async (): Promise<Post[]> => {
       dislikes: true,
       date: true,
       image: true,
-      userId: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
     },
   });
 };
@@ -21,12 +29,29 @@ export const getPost = async (id: number): Promise<Post | null> => {
     where: {
       id,
     },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likes: true,
+      dislikes: true,
+      date: true,
+      image: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
+    },
   });
 };
 
-export const createPost = async (post: Omit<Post, "id">): Promise<Post> => {
+export const createPost = async (post: PostWrite): Promise<Post> => {
   const { title, content, likes, dislikes, date, image, userId } = post;
-
   return await db.post.create({
     data: {
       title,
@@ -37,15 +62,32 @@ export const createPost = async (post: Omit<Post, "id">): Promise<Post> => {
       image,
       userId,
     },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likes: true,
+      dislikes: true,
+      date: true,
+      image: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
+    },
   });
 };
 
 export const updatePost = async (
   id: number,
-  post: Omit<Post, "id">
+  post: PostWrite
 ): Promise<Post> => {
   const { title, content, likes, dislikes, date, image, userId } = post;
-
   return await db.post.update({
     where: {
       id,
@@ -59,13 +101,31 @@ export const updatePost = async (
       image,
       userId,
     },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likes: true,
+      dislikes: true,
+      date: true,
+      image: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
+    },
   });
 };
 
-export const deletePost =async (id: number): Promise<void> => {
+export const deletePost = async (id: number): Promise<void> => {
   await db.post.delete({
     where: {
       id,
-    }
-  })
-}
+    },
+  });
+};

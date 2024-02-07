@@ -4,9 +4,26 @@ import * as PostService from './post.service';
 
 export const postRouter = express.Router();
 
+// postRouter.get('/', async (request: Request, response: Response) => {
+//   try {
+//     const posts = await PostService.getPosts();
+//     return response.status(200).json(posts);
+//   } catch (err: any) {
+//     return response.status(500).json(err.message);
+//   }
+// })
+
 postRouter.get('/', async (request: Request, response: Response) => {
+  const title = String(request.query.title);
   try {
-    const posts = await PostService.getPosts();
+    let posts; 
+    if (title === 'undefined') {
+      posts = await PostService.getPosts();
+    } else {
+      posts = await PostService.getPostsByTitle(title);
+    }
+    
+    if (!posts) response.status(404).json("Posts not be found!");
     return response.status(200).json(posts);
   } catch (err: any) {
     return response.status(500).json(err.message);

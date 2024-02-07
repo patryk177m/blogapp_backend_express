@@ -24,6 +24,35 @@ export const getPosts = async (): Promise<Post[]> => {
   });
 };
 
+export const getPostsByTitle = async (title: string): Promise<Post[] | null> => {
+  return await db.post.findMany({
+    where: {
+      title: {
+        contains: title || '', 
+        mode: 'insensitive',
+      }
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likes: true,
+      dislikes: true,
+      date: true,
+      image: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
+    },
+  })
+}
+
 export const getPost = async (id: number): Promise<Post | null> => {
   return await db.post.findUnique({
     where: {

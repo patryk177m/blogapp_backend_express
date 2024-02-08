@@ -12,3 +12,32 @@ categoryRouter.get('/', async (request: Request, response: Response) => {
     return response.status(500).json(err.message);
   }
 })
+
+categoryRouter.get('/:id', async (request: Request, response: Response) => {
+  const id: number = Number(request.params.id);
+
+  try {
+    const category = await CategoryService.getCategory(id);
+    if (!category) response.status(404).json("User not be found!");
+    return response.status(200).json(category);
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+})
+
+categoryRouter.post('/', body(), async (request: Request, response: Response) => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) response.status(400).json({ errors: errors.array() });
+
+  try {
+    const { title, about, image } = request.body;
+    const newCategory = await CategoryService.createCategories({
+      title,
+      about,
+      image,
+    });
+    return response.status(201).json(newCategory);
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+})

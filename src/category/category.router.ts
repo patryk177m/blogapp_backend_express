@@ -41,3 +41,31 @@ categoryRouter.post('/', body(), async (request: Request, response: Response) =>
     return response.status(500).json(err.message);
   }
 })
+
+categoryRouter.put("/:id", body(), async (request: Request, response: Response) => {
+  const errors = validationResult(request);
+  if (!errors.isEmpty()) response.status(400).json({ errors: errors.array() });
+
+  const id: number = Number(request.params.id);
+
+  try {
+    const { title, about, image } = request.body;
+    const updatedCategory = await CategoryService.updateCategory(
+      { title, about, image },
+      id
+    );
+    return response.status(200).json(updatedCategory);
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+})
+
+categoryRouter.delete("/:id", async (request: Request, response: Response) => {
+  const id: number = Number(request.params.id);
+  try {
+    await CategoryService.deleteCategory(id);
+    return response.status(204).json("User has been succesfully deleted");
+  } catch (err: any) {
+    return response.status(500).json(err.message);
+  }
+})

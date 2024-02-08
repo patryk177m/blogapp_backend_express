@@ -4,6 +4,7 @@ import cors from 'cors';
 import { userRouter } from './user/user.router';
 import { postRouter } from './post/post.router';
 import { categoryRouter } from './category/category.router';
+import path from 'path';
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.use(express.json());
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/categories', categoryRouter);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
   console.log(`Success is running http://locahost:${PORT}`)

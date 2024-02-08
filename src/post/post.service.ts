@@ -24,13 +24,27 @@ export const getPosts = async (): Promise<Post[]> => {
   });
 };
 
-export const getPostsByTitle = async (title: string): Promise<Post[] | null> => {
+export const getPostsSearch = async (
+  query: string
+): Promise<Post[] | null> => {
   return await db.post.findMany({
     where: {
-      title: {
-        contains: title || '', 
-        mode: 'insensitive',
-      }
+      OR: [
+        {
+          title: {
+            contains: query || "",
+            mode: "insensitive",
+          },
+        },
+        {
+          user: {
+            surname: {
+              contains: query || "",
+              mode: "insensitive",
+            },
+          },
+        },
+      ],
     },
     select: {
       id: true,
@@ -50,8 +64,41 @@ export const getPostsByTitle = async (title: string): Promise<Post[] | null> => 
         },
       },
     },
-  })
-}
+  });
+};
+
+export const getPostsByNameUser = async (
+  query: string
+): Promise<Post[] | null> => {
+  return await db.post.findMany({
+    where: {
+      user: {
+        name: {
+          contains: query || "",
+          mode: "insensitive",
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      likes: true,
+      dislikes: true,
+      date: true,
+      image: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+          title: true,
+          about: true,
+        },
+      },
+    },
+  });
+};
 
 export const getPost = async (id: number): Promise<Post | null> => {
   return await db.post.findUnique({

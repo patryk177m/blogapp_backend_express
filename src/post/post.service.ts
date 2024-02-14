@@ -20,6 +20,7 @@ export const getPosts = async (): Promise<Post[]> => {
           about: true,
         },
       },
+      categories: true,
     },
   });
 };
